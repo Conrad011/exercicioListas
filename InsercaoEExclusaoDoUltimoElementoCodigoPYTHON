@@ -1,0 +1,73 @@
+//Optei por fazer tambem em python para melhor entendimento
+
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        
+class AtividadeUna:
+    def __init__(self):
+        self.header = None
+    def update(self, data):
+        newNo = Node(data)
+        if self.header is None:
+            self.header = newNo
+            return
+        conterValue = self.header
+        while conterValue.next:
+            conterValue = conterValue.next
+        conterValue.next = newNo
+        return
+    def insertLastValue(self, data):
+        newValue = Node(data)
+        valueTotal = self.header
+        while valueTotal.next:
+            valueTotal = valueTotal.next
+        valueTotal.next = newValue
+        return valueTotal
+    def deleteLastData(self):
+        if self.header is None:
+            print("A lista esta vazia")
+            return
+        
+        if self.header.next is None: # Pensando no caso de haver apenas 1 elemento na lista
+            self.header = None 
+            return
+        currentNode = self.header
+        
+        while currentNode.next and currentNode.next.next: # Estou verificando se ha pelo menos dois nos a frente
+            currentNode = currentNode.next
+        currentNode.next = None
+        return
+    def length(self):
+        if self.header is None: #Se a cabeca for None, quer dizer que a lista esta vazia e seu comprimento e 0
+            return 0 
+        currentNode = self.header
+        total = 0
+        
+        while currentNode:
+            total += 1
+            currentNode = currentNode.next
+        print(total)
+        return total
+
+    def display(self):
+        contents = self.header
+
+        if contents is None:
+            print("List has no elements")
+
+        while contents:
+            print(contents.data)
+            contents = contents.next
+        print("-----------------")
+list = AtividadeUna()
+list.update(15)
+list.update(16)
+list.update(18)
+list.display()
+list.insertLastValue(19)
+list.display()
+list.deleteLastData()
+list.display()
