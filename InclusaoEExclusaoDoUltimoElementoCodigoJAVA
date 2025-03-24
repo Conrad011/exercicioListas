@@ -1,0 +1,130 @@
+//Atividade em JAVA. Fiz tambem em python para fins de maior entendimento
+
+public class UniBHList<T> {
+    // Mantém a referência para o primeiro nó da lista.
+    private Node<T> firstNode;
+    private int totalElements;
+
+    // Insere um valor no inicio da lista.
+    public void insertAtBeginning(T value) {
+        Node<T> newNode = new Node<>(value);
+        newNode.setNext(firstNode);
+        firstNode = newNode;
+        totalElements++;
+    }
+
+    // Remove o no do inicio da lista e retorna ele.
+    public Node<T> removeAtBeginning() {
+        Node<T> aux = firstNode;
+        firstNode = firstNode.getNext();
+        totalElements--;
+        return aux;
+    }
+
+    // Insere um valor no final da lista
+    public void insertAtEnd(T value) {
+        Node<T> newNode = new Node<>(value);
+        
+        // Se a lista estiver vazia, insere no início (igual ao método insertAtBeginning).
+        if (firstNode == null) {
+            firstNode = newNode;
+        } else {
+            // Percorre a lista até o último no
+            Node<T> currentNode = firstNode;
+            while (currentNode.getNext() != null) {
+                currentNode = currentNode.getNext();
+            }
+            currentNode.setNext(newNode);
+        }
+        totalElements++;
+    }
+
+    // Remove o ultimo no da lista e retorna ele
+    public Node<T> removeAtEnd() {
+        if (firstNode == null) {
+            return null; // Lista vazia
+        }
+
+        if (firstNode.getNext() == null) {
+            // Se houver apenas um nó, remove o primeiro e único nó.
+            Node<T> aux = firstNode;
+            firstNode = null;
+            totalElements--;
+            return aux;
+        }
+
+        // Percorre a lista ate o penultimo no
+        Node<T> currentNode = firstNode;
+        while (currentNode.getNext() != null && currentNode.getNext().getNext() != null) {
+            currentNode = currentNode.getNext();
+        }
+
+        // Remove o ultimo no
+        Node<T> aux = currentNode.getNext();
+        currentNode.setNext(null);
+        totalElements--;
+        return aux;
+    }
+
+    // Remove um no com o valor especificado
+    public boolean removeByValue(T value) {
+        if (firstNode == null) {
+            return false; // Lista vazia
+        }
+
+        // Se o primeiro no contem o valor, chama o metodo removeAtBeginning
+        if (firstNode.getValue().equals(value)) {
+            removeAtBeginning();
+            return true;
+        }
+
+        // Percorre a lista para encontrar o no com o valor
+        Node<T> currentNode = firstNode;
+        while (currentNode.getNext() != null && !currentNode.getNext().getValue().equals(value)) {
+            currentNode = currentNode.getNext();
+        }
+
+        // Se encontrou o valor, remove o no
+        if (currentNode.getNext() != null) {
+            currentNode.setNext(currentNode.getNext().getNext());
+            totalElements--;
+            return true;
+        }
+
+        return false; // Valor não encontrado
+    }
+
+    // Pesquisa um no pelo valor especificado e retorna o no
+    public Node<T> search(T value) {
+        Node<T> currentNode = firstNode;
+        while (currentNode != null) {
+            if (currentNode.getValue().equals(value)) {
+                return currentNode; // Retorna o nó se o valor for encontrado
+            }
+            currentNode = currentNode.getNext();
+        }
+        return null; // Valor não encontrado
+    }
+
+    // Retorna uma representcaoa da lista como uma string
+    @Override
+    public String toString() {
+        if (this.totalElements == 0) {
+            return "[ ]"; // Lista vazia
+        }
+
+        Node<T> currentNode = firstNode;
+        StringBuilder builder = new StringBuilder("[");
+
+        for (int i = 0; i < totalElements; i++) {
+            builder.append(currentNode.getValue());
+            builder.append(", ");
+
+            currentNode = currentNode.getNext();
+        }
+
+        builder.append("]");
+
+        return builder.toString();
+    }
+}
