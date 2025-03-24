@@ -1,0 +1,133 @@
+class Node:
+    def __init__(self, value):
+        self.value = value
+        self.next = None
+    
+    def get_value(self):
+        return self.value
+    
+    def set_value(self, value):
+        self.value = value
+    
+    def get_next(self):
+        return self.next
+    
+    def set_next(self, next_node):
+        self.next = next_node
+
+
+class UniBHList:
+    def __init__(self):
+        self.firstNode = None
+        self.totalElements = 0
+
+    # Pesquisa um item na lista. Retorna erro se o item nao existir
+    def searchItem(self, value):
+        currentNode = self.firstNode
+        index = 0
+        
+        while currentNode is not None:
+            if currentNode.get_value() == value:
+                return currentNode  # Retorna o nó se encontrado
+            currentNode = currentNode.get_next()
+            index += 1
+        
+        raise ValueError("Item nao encontrado na lista")  # Erro se não encontrado
+    
+    # Retira item pelo valor da chave. Retorna erro se o valor nao estiver presente
+    def removeByValue(self, value):
+        if self.firstNode is None:
+            raise ValueError("Lista vazia")  # Lista vazia
+
+        # Se o primeiro nó contiver o valor
+        if self.firstNode.get_value() == value:
+            self.removeAtBeginning()
+            return
+
+        currentNode = self.firstNode
+        while currentNode.get_next() is not None:
+            if currentNode.get_next().get_value() == value:
+                currentNode.set_next(currentNode.get_next().get_next())
+                self.totalElements -= 1
+                return
+            currentNode = currentNode.get_next()
+
+        raise ValueError("Valor nao encontrado na lista")  # Erro se o valor nao for encontrado
+
+    # Verifica se a lista esta vazia. Retorna True se vazia
+    def isEmpty(self):
+        return self.firstNode is None  # Retorna True se a lista estiver vazia
+
+    # Insere um elemento apos o i-esimo item da lista
+    def insertAfterIndex(self, i, value):
+        if i < 0 or i >= self.totalElements:
+            raise IndexError("Posicao invalida")  # Erro se a posicao nao existir
+        
+        currentNode = self.firstNode
+        for _ in range(i):
+            currentNode = currentNode.get_next()
+        
+        newNode = Node(value)
+        newNode.set_next(currentNode.get_next())
+        currentNode.set_next(newNode)
+        self.totalElements += 1
+
+    # Retira o i-esimo item da lista
+    def removeAtIndex(self, i):
+        if i < 0 or i >= self.totalElements:
+            raise IndexError("Posicao invalida")  # Erro se a posicao nao existir
+        
+        if i == 0:
+            self.removeAtBeginning()
+            return
+        
+        currentNode = self.firstNode
+        for _ in range(i - 1):
+            currentNode = currentNode.get_next()
+        
+        currentNode.set_next(currentNode.get_next().get_next())
+        self.totalElements -= 1
+
+    # Retorna o tamanho da lista
+    def size(self):
+        return self.totalElements  # Retorna o total de elementos na lista
+
+    # Permite a modificacao de um elemento presente na lista
+    def modifyElement(self, i, value):
+        if i < 0 or i >= self.totalElements:
+            raise IndexError("Posicao invalida")  # Erro se a posicao nao existir
+        
+        currentNode = self.firstNode
+        for _ in range(i):
+            currentNode = currentNode.get_next()
+        
+        currentNode.set_value(value)  # Modifica o valor do nó na posicao i
+
+    # Insere um elemento no inicio da lista
+    def insertAtBeginning(self, value):
+        newNode = Node(value)
+        newNode.set_next(self.firstNode)
+        self.firstNode = newNode
+        self.totalElements += 1
+
+    # Remove o primeiro item da lista
+    def removeAtBeginning(self):
+        if self.firstNode is None:
+            raise ValueError("Lista vazia")  # Lista vazia
+        self.firstNode = self.firstNode.get_next()
+        self.totalElements -= 1
+
+    # Metodo para mostrar a lista como uma string
+    def __str__(self):
+        if self.firstNode is None:
+            return "[ ]"  # Lista vazia
+        
+        currentNode = self.firstNode
+        result = "["
+        
+        while currentNode is not None:
+            result += str(currentNode.get_value()) + ", "
+            currentNode = currentNode.get_next()
+        
+        result = result.rstrip(", ") + "]"
+        return result
